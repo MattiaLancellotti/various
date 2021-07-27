@@ -4,97 +4,64 @@
 
 #define ROWS 6
 #define COLUMNS 6
-#define NOT_CONNECTED -1
+#define NA -1
 
 enum CITIES { A, B, C, D, E, F };
 
-//  ###  A  B  C  D  E  F
-//   A   0 50 -1 -1 -1 70
-//   B  50  0 40 -1 50 -1
-//   C  -1 40  0 20 20 -1
-//   D  -1 -1 20  0 -1 -1
-//   E  -1 20 50 -1  0 50
-//   F  70 -1 -1 -1 50  0
+/* Creting the grid with the necessary information */
+static int mat[ROWS][COLUMNS] = {
+   {  0, 50, NA, NA, NA, 70 },
+   { 50,  0, 40, NA, 50, NA },
+   { NA, 40,  0, 20, 20, NA },
+   { NA, NA, 20,  0, NA, NA },
+   { NA, 20, 50, NA,  0, 50 },
+   { 70, NA, NA, NA, 50,  0 }
+};
 
-void print_mat(int[][COLUMNS]);
+void print_mat(void);
 char *print_path(int [], size_t);
-int are_connected(int[][COLUMNS], int, int);
-int are_interconnected(int[][COLUMNS], int[], int, int, int);
+int are_connected(int /*first_loc*/, int /*sec_loc*/);
+int are_interconnected(int[], int, int, int);
 static void shift(int[], size_t);
 static void reset(int[], size_t);
 
-int main() {
-    int mat[ROWS][COLUMNS] = { 0 }, path[COLUMNS] = { -1, -1, -1, -1, -1, -1 };
+int main(void) {
+   int path[COLUMNS] = { -1, -1, -1, -1, -1, -1 };
 
-    mat[A][A] = 0;
-  mat[A][B] = 50;
-  mat[A][C] = NOT_CONNECTED;
-  mat[A][D] = NOT_CONNECTED;
-  mat[A][E] = NOT_CONNECTED;
+   (void) print_mat();
+   printf("Is there a direct way?    A -> B: %s\n", are_connected(A, B) ? "yes" : "no");
+   printf("Is there a direct way?    E -> C: %s\n", are_connected(E, C) ? "yes" : "no");
+   printf("Is there a direct way?    F -> E: %s\n", are_connected(F, E) ? "yes" : "no");
+   printf("Is there a direct way?    F -> D: %s\n", are_connected(F, D) ? "yes" : "no");
 
-  mat[B][A] = 50;
-  mat[B][B] = 0;
-  mat[B][C] = 40;
-  mat[B][D] = NOT_CONNECTED;
-  mat[B][E] = 20;
+   printf("Is there an indirect way? (E -> E): ");
+   if (are_interconnected(path, E, E, A))
+      printf("%s", print_path(path, COLUMNS));
+   else
+      printf("No");
 
-  mat[C][A] = NOT_CONNECTED;
-  mat[C][B] = 40;
-	mat[C][C] = 0;
-	mat[C][D] = 20;
-  mat[C][E] = 50;
-
-	mat[D][A] = NOT_CONNECTED;
-	mat[D][B] = NOT_CONNECTED;
-	mat[D][C] = 20;
-	mat[D][D] = 0; 
-  mat[D][E] = NOT_CONNECTED;
+   reset(path, COLUMNS);
   
-  mat[E][A] = NOT_CONNECTED;
-  mat[E][B] = 20;
-  mat[E][C] = 50;
-  mat[E][D] = NOT_CONNECTED;
-  mat[E][E] = NOT_CONNECTED;
+   printf("Is there an indirect way? (D -> A): ");
+   if (are_interconnected(path, D, D, A))
+      printf("%s", print_path(path, COLUMNS));
+   else
+      printf("No");
 
-  mat[F][A] = 70;
-  mat[F][B] = NOT_CONNECTED;
-  mat[F][C] = NOT_CONNECTED;
-  mat[F][D] = NOT_CONNECTED;  
-  mat[F][E] = 50;
-  mat[F][F] = 0;
+   reset(path, COLUMNS);
 
-  print_mat(mat);
-  printf("Is there a direct way?    A -> B: %d\n", are_connected(mat, A, B) ? 1 : 0);
-  printf("Is there a direct way?    A -> D: %d\n", are_connected(mat, A, D) ? 1 : 0);
-  printf("Is there a direct way?    A -> E: %d\n", are_connected(mat, A, E) ? 1 : 0);
-  printf("Is there a direct way?    E -> C: %d\n", are_connected(mat, E, C) ? 1 : 0);
-  printf("Is there a direct way?    F -> E: %d\n", are_connected(mat, F, E) ? 1 : 0);
-  printf("Is there a direct way?    F -> D: %d\n", are_connected(mat, F, D) ? 1 : 0);
+   printf("Is there an indirect way? F -> D: ");
+   if (are_interconnected(path, F, F, D))
+      printf("%s", print_path(path, COLUMNS));
+   else
+      printf("No")
 
-  printf("Is there an indirect way? E -> E: %d\n", are_interconnected(mat, path, E, E, A));
-  printf("Path: \n=> ");
-  printf("%s", print_path(path, COLUMNS));
+   reset(path, COLUMNS);
 
-  reset(path, COLUMNS);
-  
-  printf("Is there an indirect way? D -> A: %d\n", are_interconnected(mat, path, D, D, A));
-  printf("Path: \n=> ");
-  printf("%s", print_path(path, COLUMNS));
-
-  reset(path, COLUMNS);
-
-  printf("Is there an indirect way? F -> D: %d\n", are_interconnected(mat, path, F, F, D));
-  printf("Path: \n=> ");
-  printf("%s", print_path(path, COLUMNS));
-
-  reset(path, COLUMNS);
-
-  printf("Is there an indirect way? F -> C: %d\n", are_interconnected(mat, path, F, F, C));
-  printf("Path: \n=>");
-  printf("%s", print_path(path, COLUMNS));
+   return 0;
 }
 
-void print_mat(int mat[][COLUMNS]) {
+void print_mat(void) {
   printf("CONNECTIONS:\n");
   for (size_t i=0; i<ROWS; i++) {
     for (size_t j=0; j<COLUMNS; j++)
@@ -105,38 +72,43 @@ void print_mat(int mat[][COLUMNS]) {
   }
 }
 
-int are_connected(int mat[][COLUMNS], int first_location, int second_location) {
-  return first_location != -1 && second_location != -1 ? mat[first_location][second_location]+1 : 0;
+int are_connected(int first_loc, int sec_loc) {
+   /* Checking if the given locations are available */
+   if (first_loc != NA && sec_loc != NA)
+      return mat[first_loc][sec_loc]+1;
+
+   /* Not connected */
+   return 0;
 }
 
-int are_interconnected(int mat[][COLUMNS], int path[], int start_location, int first_location, int second_location) {
-  int first_locations_connections[COLUMNS];
+int are_interconnected(int path[], int start_location, int first_location, int second_location) {
+   int first_locations_connections[COLUMNS];
 
-  if (first_location == second_location) {
-    path[0] = first_location;
-    return 1;
-  }
+   if (first_location == second_location) {
+      path[0] = first_location;
+      return 1;
+   }
 
-  //getting nodes
-  for (int i=0; i<COLUMNS; i++)
-    first_locations_connections[i] = mat[first_location][i] > 0 ? i : -1;
+   //getting nodes
+   for (int i=0; i<COLUMNS; i++)
+      first_locations_connections[i] = mat[first_location][i] > 0 ? i : -1;
  
-  //getting deeper
-  for (size_t i=0; i<COLUMNS; i++)
-    if (first_locations_connections[i] != -1 && start_location != first_locations_connections[i])
-      if (are_interconnected(mat, path, first_location, first_locations_connections[i], second_location)) {
-        shift(path, COLUMNS);
-        path[0] = first_location;
-        return 1;
-      }
+   //going deeper
+   for (size_t i=0; i<COLUMNS; i++)
+      if (first_locations_connections[i] != -1 && start_location != first_locations_connections[i])
+         if (are_interconnected(path, first_location, first_locations_connections[i], second_location)) {
+            shift(path, COLUMNS);
+            path[0] = first_location;
+            return 1;
+         }
 
-  return 0;
+   return 0;
 }
 
 static void shift(int vet[], size_t size) {
-  for (size_t i=size-1; i>0; i--)
-    vet[i] = vet[i-1];
-  vet[0] = 0;
+   for (size_t i=size-1; i>0; i--)
+      vet[i] = vet[i-1];
+   vet[0] = 0;
 }
 
 static void reset(int vet[], size_t size) {
