@@ -6,7 +6,7 @@
 #include<sys/ioctl.h>
 
 #define SIDE 10
-#define BOX 8
+#define BOX 15
 
 #define CLEAR system("clear");
 #define RAW system("stty raw");
