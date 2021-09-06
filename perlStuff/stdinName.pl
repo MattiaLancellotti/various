@@ -3,11 +3,12 @@ use strict;
 use warnings;
 
 # Asking the name to the user
-print("Hello there! Please enter your name: ");
-chomp(my $name = <stdin>);
-printf("Hello mate $name, I'm writing this down.\n");
+print "Hello there!\n";
+print "Enter your name: ";
+chomp (my $name  = <STDIN>);
+print "Enter your family name: ";
+chomp (my $sname = <STDIN>);
 
 # Writing the name to a file
-open(my $file, ">", "name.txt") or die("Can't open name.txt $!");
+open (my $file, ">", "name.txt") or die("Can't open name.txt $!");
 print $file $name;
-

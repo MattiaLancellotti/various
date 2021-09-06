@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 use strict;
-use warnings;
+use warnings 'all';
 
 open(my $file, "<", "name.txt") or die("Can't open name.txt: $!");
 my $name = <$file>;
