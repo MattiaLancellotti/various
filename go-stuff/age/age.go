@@ -1,31 +1,59 @@
 package main
 
 import (
-     "os"
      "fmt"
-     "bufio"
+     "strconv"
 )
 
+/* A struct rappresentation of a person */
+type Person struct {
+     FirstName  string
+     SecondName string
+     Age        int
+}
+
+func CreatePerson(FName string, SName string, Age int) *Person {
+     person := Person{FName, SName, Age}
+     return &person
+}
+
+func PrintPerson(person *Person) {
+     fmt.Println(person.FirstName,  "\t",
+                 person.SecondName, "\t",
+                 person.Age)
+}
+
 func main() {
-     var age int
+     var (
+          fname     string
+          sname     string
+          age       string
+          people [2]*Person
+     )
 
-     /* Reading the age */
-     fmt.Println("What is your age?")
-     _, err := fmt.Scan(&age)
-     if err != nil {
-          fmt.Println("Coulnd't read your age.")
-          os.Exit(1)
+     for i:=0; i<2; i++ {
+          fmt.Print("Insert the name: ")
+          if _, err := fmt.Scan(&fname); err != nil {
+               panic("Couldn't read the name.")
+          }
+
+          fmt.Print("Insert the surname: ")
+          if _, err := fmt.Scan(&sname); err != nil {
+               panic("Couldn't read the surname.")
+          }
+
+          fmt.Print("Insert the age: ")
+          _, err := fmt.Scan(&age)
+          num, nrr := strconv.Atoi(age)
+          if err != nil || nrr != nil || num <= 0 {
+               panic("Couldn't read the age.")
+          }
+
+          people[i] = CreatePerson(fname, sname, num)
      }
 
-     /* Reading your name */
-     reader := bufio.NewReader(os.Stdin)
-     fmt.Println("What is your name?")
-     name, err := reader.ReadString('\n')
-     if err != nil {
-          fmt.Println("Coulnd't read your name.")
-          os.Exit(1)
+     fmt.Println("Name\tSurname\tAge")
+     for i:=0; i<2; i++ {
+          PrintPerson(people[i])
      }
-
-     /* Outputting */
-     fmt.Println("Your name is ", name, " and your age ", age)
 }
