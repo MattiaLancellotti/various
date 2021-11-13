@@ -1,6 +1,7 @@
 package main
 
 import (
+     "os"
      "fmt"
      "strconv"
 )
@@ -21,6 +22,19 @@ func PrintPerson(person *Person) {
      fmt.Println(person.FirstName,  "\t",
                  person.SecondName, "\t",
                  person.Age)
+}
+
+func SavePerson(person *Person) {
+     file, err := os.OpenFile(person.FirstName, os.O_WRONLY|os.O_CREATE, 0755)
+     if err != nil {
+          panic("Couldn't work with files")
+     }
+
+     file.WriteString("Name: " + person.FirstName)
+     file.WriteString("\nSurname: " + person.SecondName)
+     file.WriteString("\nAge: " + strconv.Itoa(person.Age))
+
+     defer file.Close()
 }
 
 func main() {
@@ -56,4 +70,7 @@ func main() {
      for i:=0; i<2; i++ {
           PrintPerson(people[i])
      }
+
+     fmt.Println("Saving first person in the list.")
+     SavePerson(people[1])
 }
