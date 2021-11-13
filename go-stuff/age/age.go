@@ -19,7 +19,7 @@ func CreatePerson(FName string, SName string, Age int) *Person {
 }
 
 func PrintPerson(person *Person) {
-     fmt.Println(person.FirstName,  "\t",
+     println(person.FirstName,  "\t",
                  person.SecondName, "\t",
                  person.Age)
 }
@@ -46,17 +46,17 @@ func main() {
      )
 
      for i:=0; i<2; i++ {
-          fmt.Print("Insert the name: ")
+          print("Insert the name: ")
           if _, err := fmt.Scan(&fname); err != nil {
                panic("Couldn't read the name.")
           }
 
-          fmt.Print("Insert the surname: ")
+          print("Insert the surname: ")
           if _, err := fmt.Scan(&sname); err != nil {
                panic("Couldn't read the surname.")
           }
 
-          fmt.Print("Insert the age: ")
+          print("Insert the age: ")
           _, err := fmt.Scan(&age)
           num, nrr := strconv.Atoi(age)
           if err != nil || nrr != nil || num <= 0 {
@@ -66,11 +66,11 @@ func main() {
           people[i] = CreatePerson(fname, sname, num)
      }
 
-     fmt.Println("Name\tSurname\tAge")
+     println("Name\tSurname\tAge")
      for i:=0; i<2; i++ {
           PrintPerson(people[i])
      }
 
-     fmt.Println("Saving second person in the list.")
+     println("Saving second person in the list.")
      SavePerson(people[1])
 }
