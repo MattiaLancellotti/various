@@ -71,6 +71,6 @@ func main() {
           PrintPerson(people[i])
      }
 
-     fmt.Println("Saving first person in the list.")
+     fmt.Println("Saving second person in the list.")
      SavePerson(people[1])
 }
