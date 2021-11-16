@@ -13,15 +13,9 @@ type Person struct {
      Age        int
 }
 
-func CreatePerson(FName string, SName string, Age int) *Person {
-     person := Person{FName, SName, Age}
-     return &person
-}
-
-func PrintPerson(person *Person) {
-     println(person.FirstName,  "\t",
-                 person.SecondName, "\t",
-                 person.Age)
+func (p Person) String() string {
+     return fmt.Sprintf("Name: %v\nSurname: %v\nAge: %v\n",
+                              p.FirstName, p.SecondName, p.Age);
 }
 
 func SavePerson(person *Person) {
@@ -30,10 +24,7 @@ func SavePerson(person *Person) {
           panic("Couldn't work with files")
      }
 
-     file.WriteString("Name: " + person.FirstName)
-     file.WriteString("\nSurname: " + person.SecondName)
-     file.WriteString("\nAge: " + strconv.Itoa(person.Age))
-
+     file.WriteString(person.String())
      defer file.Close()
 }
 
@@ -63,12 +54,12 @@ func main() {
                panic("Couldn't read the age.")
           }
 
-          people[i] = CreatePerson(fname, sname, num)
+          people[i] = &Person{fname, sname, num}
      }
 
      println("Name\tSurname\tAge")
      for i:=0; i<2; i++ {
-          PrintPerson(people[i])
+          fmt.Println(people[i])
      }
 
      println("Saving second person in the list.")
