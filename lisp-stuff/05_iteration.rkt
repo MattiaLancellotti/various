@@ -6,8 +6,15 @@
 ;;; for i in numbers; do display i
 (for ([i numbers]) (display i))
 
-(define alphabet
+(define alphabet0
   (for/hash ([i numbers]
              [j letters])
     (values i j)))
-(display alphabet)
+
+(define alphabet1
+  (for/list ([i numbers]
+             [j letters])
+    '(i j)))
+
+(displayln alphabet0)
+(displayln alphabet1)
