@@ -24,7 +24,7 @@ func SavePerson(person *Person) {
           panic("Couldn't work with files")
      }
 
-     file.WriteString(person.String())
+     file.WriteString(fmt.Sprint(person))
      defer file.Close()
 }
 
