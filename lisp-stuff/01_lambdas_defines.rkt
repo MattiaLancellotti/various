@@ -6,25 +6,29 @@
 
 ;;; Defining an helper function
 (define string-extract
-  (lambda (s) (substring s 0 (- (string-length s) 1))))
+  (lambda (s)
+    (substring s 0 (- (string-length s) 1))))
 
 ;;; Checks if a word is a female word in italian
 (define female?
   ;; this piece of code checks whether the last character of a word is an 'a'
-  (lambda (s) (char=?
-                (string-ref s (- (string-length s) 1)) #\a)))
+  (lambda (s)
+    (char=?
+      (string-ref s (- (string-length s) 1)) #\a)))
 
 ;;; Appending an 'i' at the end of every string
 (define plural
   ;; Choosing which letter to attach
-  (lambda (s) (if (female? s)
-                (string-append (string-extract s) "e")
-                (string-append (string-extract s) "i"))))
+  (lambda (s)
+    (if (female? s)
+      (string-append (string-extract s) "e")
+      (string-append (string-extract s) "i"))))
 
 ;;; Taking a string and writing it as a private name
 (define make-name
-  (lambda ([s "name"]) (string->immutable-string
-                (string-titlecase s))))
+  (lambda ([s "name"])
+    (string->immutable-string
+      (string-titlecase s))))
 
 ;;; Calculating a cylinder's total area
 (define cylinder
