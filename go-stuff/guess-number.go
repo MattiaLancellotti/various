@@ -6,6 +6,8 @@ import (
      "math/rand"
 )
 
+// TODO: Put the random number generator in its own function.
+// TODO: Maybe some pretty printing.
 func main() {
      // Parsing milliseconds
      m, err := time.ParseDuration("2s")
